@@ -92,11 +92,10 @@
   },
   "dependencies": {
     "jquery": "^3.4.1",
-    "js-helpers": "git+https://git@gitlab.com/arasharg/js-helpers.git",
     "unfetch": "^4.1.0",
     "whatwg-fetch": "^3.0.0"
   },
   "//": {
-    "js-helpers": "git+ssh://git@gitlab.com/arasharg/js-helpers.git"
+    "js-helpers": "git+https://git@gitlab.com/arasharg/js-helpers.git"
   }
 }
