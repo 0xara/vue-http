@@ -3,17 +3,11 @@ import { isArray } from 'js-helpers/dist/array/isArray';
 import { hasOwnProperty } from 'js-helpers/dist/object/hasOwnProperty';
 import Http from './Http/Http';
 
-function install(Vue, option = {}) {
-
-    const { token = '', ...options } = option;
+function install(Vue, options = {}, setup = {}) {
 
     Vue.prototype.$http = new Http(options);
 
-    if(token) {
-        Http.ajaxSetup({
-            headers: { 'X-CSRF-Token': typeof token === 'function' ? token() : token }
-        });
-    }
+    Http.ajaxSetup(typeof setup === 'function' ? setup() : setup);
 
     Vue.mixin({
         methods: {
