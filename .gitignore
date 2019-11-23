@@ -1,0 +1,10 @@
+.DS_Store
+node_modules/
+lib
+npm-debug.log
+yarn-error.log
+coverage
+.vscode
+.idea
+package-lock.json
+clear-history.sh

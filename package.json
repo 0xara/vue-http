@@ -1,0 +1,102 @@
+{
+  "name": "vue-http",
+  "version": "1.0.0",
+  "description": "vue-http",
+  "main": "dist/vue-http.umd.js",
+  "module": "dist/vue-http.esm.js",
+  "unpkg": "dist/vue-http.min.js",
+  "browser": {
+    "./sfc": "src/entry.vue"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "files": [
+    "dist/*",
+    "src/*"
+  ],
+  "scripts": {
+    "dev": "npm run development",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "prod": "npm run production",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "test": "jest",
+    "build": "npm run build:unpkg & npm run build:es & npm run build:umd",
+    "build:umd": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format umd --file dist/vue-http.umd.js",
+    "build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es --file dist/vue-http.esm.js",
+    "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife --file dist/vue-http.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/arasharg/vue-http.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/arasharg/vue-http/issues"
+  },
+  "homepage": "https://gitlab.com/arasharg/vue-http#readme",
+  "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.28",
+    "babel": "^6.23.0",
+    "babel-eslint": "^10.0.1",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "babel-plugin-syntax-object-rest-spread": "^6.13.0",
+    "babel-plugin-transform-es2015-destructuring": "^6.23.0",
+    "babel-plugin-transform-es2015-parameters": "^6.24.1",
+    "babel-plugin-transform-es2015-spread": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-vue-jsx": "^3.7.0",
+    "babel-preset-env": "^1.7.0",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.13.0",
+    "eslint-plugin-vue": "^5.1.0",
+    "fecha": "^2.3.3",
+    "jest": "^23.0.0",
+    "laravel-mix": "^2.1.14",
+    "minimist": "^1.2.0",
+    "rollup": "^1.1.2",
+    "rollup-plugin-babel": "^3.0.7",
+    "rollup-plugin-buble": "^0.19.6",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-css-only": "^1.0.0",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-replace": "^2.1.0",
+    "rollup-plugin-scss": "^1.0.0",
+    "rollup-plugin-terser": "^5.1.2",
+    "rollup-plugin-uglify-es": "0.0.1",
+    "rollup-plugin-vue": "^4.6.2",
+    "standard": "^12.0.1",
+    "vue": "^2.6.4",
+    "vue-jest": "^2.6.0",
+    "vue-template-compiler": "^2.6.4"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "vue"
+    ],
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    },
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
+  },
+  "dependencies": {
+    "jquery": "^3.4.1",
+    "js-helpers": "git+https://git@gitlab.com/arasharg/js-helpers.git",
+    "unfetch": "^4.1.0",
+    "whatwg-fetch": "^3.0.0"
+  },
+  "//": {
+    "js-helpers": "git+ssh://git@gitlab.com/arasharg/js-helpers.git"
+  }
+}
