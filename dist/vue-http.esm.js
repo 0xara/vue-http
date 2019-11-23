@@ -953,22 +953,14 @@ var Http = function (_HttpBase) {
 
 var _extends$5 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-function _objectWithoutProperties$4(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
 function install(Vue) {
-    var option = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var setup = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-    var _option$token = option.token,
-        token = _option$token === undefined ? '' : _option$token,
-        options = _objectWithoutProperties$4(option, ['token']);
 
     Vue.prototype.$http = new Http(options);
 
-    if (token) {
-        Http.ajaxSetup({
-            headers: { 'X-CSRF-Token': typeof token === 'function' ? token() : token }
-        });
-    }
+    Http.ajaxSetup(typeof setup === 'function' ? setup() : setup);
 
     Vue.mixin({
         methods: {
