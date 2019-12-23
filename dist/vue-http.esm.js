@@ -32,7 +32,7 @@ var HttpUtil = function () {
             /* eslint-disable no-param-reassign */
             var methodType = options.method ? options.method.toLowerCase() : options.method;
 
-            if (methodType !== 'PUT' && methodType !== 'PATCH') return options;
+            if (methodType !== 'put' && methodType !== 'patch') return options;
 
             if (HttpUtil.isFormData(options.data)) {
                 options.data.append('_method', methodType);
