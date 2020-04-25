@@ -953,10 +953,15 @@ var Http = function (_HttpBase) {
 
 var _extends$5 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+function _objectWithoutProperties$4(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 function install(Vue) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    var globalOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var setup = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
+    var _globalOptions$baseUr = globalOptions.baseUrl,
+        baseUrl = _globalOptions$baseUr === undefined ? '' : _globalOptions$baseUr,
+        options = _objectWithoutProperties$4(globalOptions, ['baseUrl']);
 
     Vue.prototype.$http = new Http(options);
 
@@ -971,6 +976,7 @@ function install(Vue) {
                 var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
                 var settings = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
+                url = this.jaxUrlGenerator(url);
                 return this.ajax(_extends$5({
                     url: url, method: method, data: data }, options, settings));
             },
@@ -1000,6 +1006,11 @@ function install(Vue) {
                 }
 
                 return false;
+            },
+            jaxUrlGenerator: function jaxUrlGenerator(url) {
+                var base = baseUrl.replace(/\/$/, '');
+                url = url.replace(/^\//, '');
+                return base + '/' + url;
             }
         }
     });
