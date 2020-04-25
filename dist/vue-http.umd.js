@@ -630,7 +630,9 @@
             value: function submit() {
                 var _this = this;
 
-                return this.handle().then(function (val) {
+                return this.handle().then(function () {
+                    var val = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
                     _this.resolve(true, val);
 
                     val.instance = _this;

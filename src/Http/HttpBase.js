@@ -113,7 +113,7 @@ class HttpBase {
     }
 
     submit() {
-        return this.handle().then((val) => {
+        return this.handle().then((val = {}) => {
             this.resolve(true, val);
 
             val.instance = this;
