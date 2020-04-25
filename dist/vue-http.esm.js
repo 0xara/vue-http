@@ -523,6 +523,8 @@ function checkStatus$1(response) {
 
 var _createClass$4 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+function _objectWithoutProperties$3(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 function _classCallCheck$4(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var drivers = {
@@ -615,7 +617,11 @@ var HttpBase = function () {
         value: function handle() {
             HttpBase.insertProcessToQueue(this);
 
-            var driver = new drivers[this.driver + 'Driver'](this.getSettings());
+            var _getSettings = this.getSettings(),
+                driver = _getSettings.driver,
+                settings = _objectWithoutProperties$3(_getSettings, ['driver']);
+
+            driver = new drivers[driver + 'Driver'](settings);
 
             return this.handler = driver.handle();
         }
@@ -754,7 +760,7 @@ var _createClass$5 = function () { function defineProperties(target, props) { fo
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-function _objectWithoutProperties$3(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+function _objectWithoutProperties$4(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
 function _classCallCheck$5(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -781,13 +787,10 @@ var Http = function (_HttpBase) {
         value: function setOptions(options) {
             var _options$name = options.name,
                 name = _options$name === undefined ? '' : _options$name,
-                _options$driver = options.driver,
-                driver = _options$driver === undefined ? '' : _options$driver,
-                settings = _objectWithoutProperties$3(options, ['name', 'driver']);
+                settings = _objectWithoutProperties$4(options, ['name']);
 
             this.name = name;
-            this.driver = driver;
-            this.options = _extends$3({}, settings, { driver: driver });
+            this.options = _extends$3({}, settings);
 
             return this;
         }

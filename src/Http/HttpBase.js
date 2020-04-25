@@ -108,7 +108,9 @@ class HttpBase {
     handle() {
         HttpBase.insertProcessToQueue(this);
 
-        const driver = new drivers[`${this.driver}Driver`](this.getSettings());
+        let { driver, ...settings } = this.getSettings();
+
+        driver = new drivers[`${driver}Driver`](settings);
 
         return (this.handler = driver.handle());
     }

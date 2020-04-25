@@ -7,11 +7,10 @@ class Http extends HttpBase {
     }
 
     setOptions(options) {
-        const { name = '', driver = '', ...settings } = options;
+        const { name = '', ...settings } = options;
 
         this.name = name;
-        this.driver = driver;
-        this.options = { ...settings, driver };
+        this.options = { ...settings };
 
         return this;
     }
