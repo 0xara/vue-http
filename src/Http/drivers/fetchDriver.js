@@ -59,7 +59,7 @@ class fetchDriver {
 
     static prepareSettings(options) {
         const {
-            method = 'GET', url, data = {}, responseType: dataType = 'json', ...rest
+            method = 'GET', url, data = {}, responseType: dataType = 'json', withCredentials = 'same-origin', ...rest
         } = options;
 
         const restOptions = fetchDriver.handleXhr(rest);
@@ -71,7 +71,7 @@ class fetchDriver {
         settings.headers = { ...(settings.headers || {}), ...fetchDriver.prepareDataType(dataType) };
 
         /** for sending cookies **/
-        settings.credentials = 'same-origin';
+        settings.credentials = withCredentials;
 
         if(HttpUtil.isFormData(settings.body)) {
             //https://stackoverflow.com/questions/39280438/fetch-missing-boundary-in-multipart-form-data-post
