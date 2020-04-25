@@ -966,11 +966,9 @@
         var setup = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
 
-        Http.ajaxSetup(options);
-
         Vue.prototype.$http = new Http();
 
-        Http.ajaxSetup(typeof setup === 'function' ? setup() : setup);
+        Http.ajaxSetup(typeof setup === 'function' ? _extends$4({}, options, setup()) : _extends$4({}, options, setup));
 
         Vue.mixin({
             methods: {

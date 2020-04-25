@@ -5,11 +5,9 @@ import Http from './Http/Http';
 
 function install(Vue, options = {}, setup = {}) {
 
-    Http.ajaxSetup(options);
-
     Vue.prototype.$http = new Http();
 
-    Http.ajaxSetup(typeof setup === 'function' ? setup() : setup);
+    Http.ajaxSetup(typeof setup === 'function' ? { ...options, ...setup() } : { ...options, ...setup });
 
     Vue.mixin({
         methods: {
