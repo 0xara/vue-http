@@ -1,50 +1,48 @@
 import HttpBase from './HttpBase';
-import HttpUtil from './HttpUtil';
 
 class Http extends HttpBase {
     constructor(options = {}) {
         super();
-        this.init(options);
+        this.setOptions(options);
     }
 
-    init(options) {
-        const { name = '', driver = 'jquery', baseUrl = '', url = '', ...settings } = options;
+    setOptions(options) {
+        const { name = '', driver = '', ...settings } = options;
 
         this.name = name;
         this.driver = driver;
-        settings.method && (settings.method = settings.method.toUpperCase());
-        this.options = { ...settings, driver, baseUrl, url: HttpUtil.urlGenerator(baseUrl, url) };
+        this.options = { ...settings, driver };
 
         return this;
     }
 
     get(url, data = {}, options = {}) {
-        return new Http().init({
-            method: 'get', url, data, ...(this.options || {}) ,...options
+        return new Http().setOptions({
+            method: 'get', url, data, ...options
         }).submit();
     }
 
     post(url, data = {}, options = {}) {
-        return new Http().init({
-            method: 'post', url, data, ...(this.options || {}) ,...options
+        return new Http().setOptions({
+            method: 'post', url, data, ...options
         }).submit();
     }
 
     put(url, data = {}, options = {}) {
-        return new Http().init({
-            method: 'put', url, data, ...(this.options || {}) ,...options
+        return new Http().setOptions({
+            method: 'put', url, data, ...options
         }).submit();
     }
 
     patch(url, data = {}, options = {}) {
-        return new Http().init({
-            method: 'patch', url, data, ...(this.options || {}) ,...options
+        return new Http().setOptions({
+            method: 'patch', url, data, ...options
         }).submit();
     }
 
     delete(url, data = {}, options = {}) {
-        return new Http().init({
-            method: 'delete', url, data, ...(this.options || {}) ,...options
+        return new Http().setOptions({
+            method: 'delete', url, data, ...options
         }).submit();
     }
 
@@ -115,7 +113,7 @@ class Http extends HttpBase {
     }
 
     static ajaxSetup(options = {}) {
-        HttpBase.ajaxSetupObject = options;
+        HttpBase.defaults = options;
     }
 
     static ajaxStop(func) {

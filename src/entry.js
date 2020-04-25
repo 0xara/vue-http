@@ -5,7 +5,9 @@ import Http from './Http/Http';
 
 function install(Vue, options = {}, setup = {}) {
 
-    Vue.prototype.$http = new Http(options);
+    Http.ajaxSetup(options);
+
+    Vue.prototype.$http = new Http();
 
     Http.ajaxSetup(typeof setup === 'function' ? setup() : setup);
 
@@ -17,7 +19,7 @@ function install(Vue, options = {}, setup = {}) {
 
             jax(url, method, data = {}, settings = {}) {
                 return this.ajax({
-                    url, method, data, ...options, ...settings
+                    url, method, data, ...settings
                 });
             },
 

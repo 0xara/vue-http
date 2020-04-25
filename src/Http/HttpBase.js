@@ -1,7 +1,6 @@
 
 import { extend } from 'js-helpers/dist/object/extend';
 import HttpUtil from './HttpUtil';
-import defaults from './HttpDefaultOptions';
 import jqueryDriver from './drivers/jqueryDriver';
 import fetchDriver from './drivers/fetchDriver';
 import unfetchDriver from './drivers/unfetchDriver';
@@ -27,7 +26,7 @@ const $ajaxSendFunctions = [];
 
 const $ajaxCompleteFunctions = [];
 
-let $ajaxSetupObject = {};
+let $defaults = {};
 
 class HttpBase {
     static get allProcessing() { return $allProcessing; }
@@ -44,9 +43,9 @@ class HttpBase {
 
     static get ajaxCompleteFunctions() { return $ajaxCompleteFunctions; }
 
-    static get ajaxSetupObject() { return $ajaxSetupObject; }
+    static get defaults() { return $defaults; }
 
-    static set ajaxSetupObject(options) { $ajaxSetupObject = options; }
+    static set defaults(options) { $defaults = options; }
 
     constructor(options) {
         window.onunhandledrejection = (e) => {
@@ -55,9 +54,11 @@ class HttpBase {
     }
 
     static prepareSettings(options = {}) {
-        const defaultOptions = { ...defaults };
 
-        const settings = extend(true, {}, defaultOptions, HttpBase.ajaxSetupObject, options);
+        const settings = extend(true, {}, HttpBase.defaults, options);
+
+        settings.method && (settings.method = settings.method.toUpperCase());
+        settings.url && settings.baseUrl && (settings.url = HttpUtil.urlGenerator(settings.baseUrl, settings.url))
 
         return HttpUtil.prepareMethodType(settings);
     }

@@ -61,8 +61,6 @@ var HttpUtil = function () {
     return HttpUtil;
 }();
 
-var defaults = {};
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass$1 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -523,8 +521,6 @@ function checkStatus$1(response) {
     }
 }
 
-var _extends$3 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass$4 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck$4(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -549,7 +545,7 @@ var $ajaxSendFunctions = [];
 
 var $ajaxCompleteFunctions = [];
 
-var $ajaxSetupObject = {};
+var $defaults = {};
 
 var HttpBase = function () {
     _createClass$4(HttpBase, null, [{
@@ -588,12 +584,12 @@ var HttpBase = function () {
             return $ajaxCompleteFunctions;
         }
     }, {
-        key: 'ajaxSetupObject',
+        key: 'defaults',
         get: function get() {
-            return $ajaxSetupObject;
+            return $defaults;
         },
         set: function set(options) {
-            $ajaxSetupObject = options;
+            $defaults = options;
         }
     }]);
 
@@ -669,9 +665,11 @@ var HttpBase = function () {
         value: function prepareSettings() {
             var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-            var defaultOptions = _extends$3({}, defaults);
 
-            var settings = extend(true, {}, defaultOptions, HttpBase.ajaxSetupObject, options);
+            var settings = extend(true, {}, HttpBase.defaults, options);
+
+            settings.method && (settings.method = settings.method.toUpperCase());
+            settings.url && settings.baseUrl && (settings.url = HttpUtil.urlGenerator(settings.baseUrl, settings.url));
 
             return HttpUtil.prepareMethodType(settings);
         }
@@ -750,7 +748,7 @@ var HttpBase = function () {
     return HttpBase;
 }();
 
-var _extends$4 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$3 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass$5 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -774,27 +772,22 @@ var Http = function (_HttpBase) {
 
         var _this = _possibleConstructorReturn(this, (Http.__proto__ || Object.getPrototypeOf(Http)).call(this));
 
-        _this.init(options);
+        _this.setOptions(options);
         return _this;
     }
 
     _createClass$5(Http, [{
-        key: 'init',
-        value: function init(options) {
+        key: 'setOptions',
+        value: function setOptions(options) {
             var _options$name = options.name,
                 name = _options$name === undefined ? '' : _options$name,
                 _options$driver = options.driver,
-                driver = _options$driver === undefined ? 'jquery' : _options$driver,
-                _options$baseUrl = options.baseUrl,
-                baseUrl = _options$baseUrl === undefined ? '' : _options$baseUrl,
-                _options$url = options.url,
-                url = _options$url === undefined ? '' : _options$url,
-                settings = _objectWithoutProperties$3(options, ['name', 'driver', 'baseUrl', 'url']);
+                driver = _options$driver === undefined ? '' : _options$driver,
+                settings = _objectWithoutProperties$3(options, ['name', 'driver']);
 
             this.name = name;
             this.driver = driver;
-            settings.method && (settings.method = settings.method.toUpperCase());
-            this.options = _extends$4({}, settings, { driver: driver, baseUrl: baseUrl, url: HttpUtil.urlGenerator(baseUrl, url) });
+            this.options = _extends$3({}, settings, { driver: driver });
 
             return this;
         }
@@ -804,8 +797,8 @@ var Http = function (_HttpBase) {
             var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
             var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-            return new Http().init(_extends$4({
-                method: 'get', url: url, data: data }, this.options || {}, options)).submit();
+            return new Http().setOptions(_extends$3({
+                method: 'get', url: url, data: data }, options)).submit();
         }
     }, {
         key: 'post',
@@ -813,8 +806,8 @@ var Http = function (_HttpBase) {
             var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
             var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-            return new Http().init(_extends$4({
-                method: 'post', url: url, data: data }, this.options || {}, options)).submit();
+            return new Http().setOptions(_extends$3({
+                method: 'post', url: url, data: data }, options)).submit();
         }
     }, {
         key: 'put',
@@ -822,8 +815,8 @@ var Http = function (_HttpBase) {
             var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
             var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-            return new Http().init(_extends$4({
-                method: 'put', url: url, data: data }, this.options || {}, options)).submit();
+            return new Http().setOptions(_extends$3({
+                method: 'put', url: url, data: data }, options)).submit();
         }
     }, {
         key: 'patch',
@@ -831,8 +824,8 @@ var Http = function (_HttpBase) {
             var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
             var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-            return new Http().init(_extends$4({
-                method: 'patch', url: url, data: data }, this.options || {}, options)).submit();
+            return new Http().setOptions(_extends$3({
+                method: 'patch', url: url, data: data }, options)).submit();
         }
     }, {
         key: 'delete',
@@ -840,8 +833,8 @@ var Http = function (_HttpBase) {
             var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
             var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-            return new Http().init(_extends$4({
-                method: 'delete', url: url, data: data }, this.options || {}, options)).submit();
+            return new Http().setOptions(_extends$3({
+                method: 'delete', url: url, data: data }, options)).submit();
         }
     }, {
         key: 'submit',
@@ -928,7 +921,7 @@ var Http = function (_HttpBase) {
         value: function ajaxSetup() {
             var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-            HttpBase.ajaxSetupObject = options;
+            HttpBase.defaults = options;
         }
     }, {
         key: 'ajaxStop',
@@ -965,14 +958,16 @@ var Http = function (_HttpBase) {
     return Http;
 }(HttpBase);
 
-var _extends$5 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends$4 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function install(Vue) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     var setup = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
 
-    Vue.prototype.$http = new Http(options);
+    Http.ajaxSetup(options);
+
+    Vue.prototype.$http = new Http();
 
     Http.ajaxSetup(typeof setup === 'function' ? setup() : setup);
 
@@ -985,8 +980,8 @@ function install(Vue) {
                 var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
                 var settings = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
-                return this.ajax(_extends$5({
-                    url: url, method: method, data: data }, options, settings));
+                return this.ajax(_extends$4({
+                    url: url, method: method, data: data }, settings));
             },
             jaxValidationErrors: function jaxValidationErrors(_ref) {
                 var request = _ref.request,
