@@ -30,6 +30,12 @@ class HttpUtil {
     static objectToFormData(data) {
         return objectToFormData(data);
     }
+
+    static urlGenerator(baseUrl, url) {
+        const base = baseUrl.replace(/\/$/, '');
+        url = url.replace(/^\//, '');
+        return `${base}/${url}`
+    }
 }
 
 

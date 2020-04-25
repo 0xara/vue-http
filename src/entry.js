@@ -3,9 +3,7 @@ import { isArray } from 'js-helpers/dist/array/isArray';
 import { hasOwnProperty } from 'js-helpers/dist/object/hasOwnProperty';
 import Http from './Http/Http';
 
-function install(Vue, globalOptions = {}, setup = {}) {
-
-    const { baseUrl = '', ...options } = globalOptions;
+function install(Vue, options = {}, setup = {}) {
 
     Vue.prototype.$http = new Http(options);
 
@@ -18,7 +16,6 @@ function install(Vue, globalOptions = {}, setup = {}) {
             },
 
             jax(url, method, data = {}, settings = {}) {
-                url = this.jaxUrlGenerator(url);
                 return this.ajax({
                     url, method, data, ...options, ...settings
                 });
@@ -46,12 +43,6 @@ function install(Vue, globalOptions = {}, setup = {}) {
                 }
 
                 return false;
-            },
-
-            jaxUrlGenerator(url) {
-                const base = baseUrl.replace(/\/$/, '');
-                url = url.replace(/^\//, '');
-                return `${base}/${url}`
             }
         }
     });

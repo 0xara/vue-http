@@ -1,4 +1,5 @@
 import HttpBase from './HttpBase';
+import HttpUtil from './HttpUtil';
 
 class Http extends HttpBase {
     constructor(options = {}) {
@@ -7,12 +8,12 @@ class Http extends HttpBase {
     }
 
     init(options) {
-        const { name = '', driver = 'jquery', ...settings } = options;
+        const { name = '', driver = 'jquery', baseUrl = '', url, ...settings } = options;
 
         this.name = name;
         this.driver = driver;
         settings.method && (settings.method = settings.method.toUpperCase());
-        this.options = { ...settings, driver };
+        this.options = { ...settings, driver, url: HttpUtil.urlGenerator(baseUrl, url) };
 
         return this;
     }
