@@ -786,13 +786,14 @@ var Http = function (_HttpBase) {
                 driver = _options$driver === undefined ? 'jquery' : _options$driver,
                 _options$baseUrl = options.baseUrl,
                 baseUrl = _options$baseUrl === undefined ? '' : _options$baseUrl,
-                url = options.url,
+                _options$url = options.url,
+                url = _options$url === undefined ? '' : _options$url,
                 settings = _objectWithoutProperties$3(options, ['name', 'driver', 'baseUrl', 'url']);
 
             this.name = name;
             this.driver = driver;
             settings.method && (settings.method = settings.method.toUpperCase());
-            this.options = _extends$4({}, settings, { driver: driver, url: HttpUtil.urlGenerator(baseUrl, url) });
+            this.options = _extends$4({}, settings, { driver: driver, baseUrl: baseUrl, url: HttpUtil.urlGenerator(baseUrl, url) });
 
             return this;
         }

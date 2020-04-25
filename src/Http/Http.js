@@ -8,12 +8,12 @@ class Http extends HttpBase {
     }
 
     init(options) {
-        const { name = '', driver = 'jquery', baseUrl = '', url, ...settings } = options;
+        const { name = '', driver = 'jquery', baseUrl = '', url = '', ...settings } = options;
 
         this.name = name;
         this.driver = driver;
         settings.method && (settings.method = settings.method.toUpperCase());
-        this.options = { ...settings, driver, url: HttpUtil.urlGenerator(baseUrl, url) };
+        this.options = { ...settings, driver, baseUrl, url: HttpUtil.urlGenerator(baseUrl, url) };
 
         return this;
     }
