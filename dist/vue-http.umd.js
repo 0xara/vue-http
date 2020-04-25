@@ -50,6 +50,13 @@
             value: function objectToFormData(data) {
                 return _objectToFormData(data);
             }
+        }, {
+            key: 'urlGenerator',
+            value: function urlGenerator(baseUrl, url) {
+                var base = baseUrl.replace(/\/$/, '');
+                url = url.replace(/^\//, '');
+                return base + '/' + url;
+            }
         }]);
 
         return HttpUtil;
@@ -266,7 +273,9 @@
                     data = _options$data === undefined ? {} : _options$data,
                     _options$responseType = options.responseType,
                     dataType = _options$responseType === undefined ? 'json' : _options$responseType,
-                    rest = _objectWithoutProperties$1(options, ['method', 'url', 'data', 'responseType']);
+                    _options$withCredenti = options.withCredentials,
+                    withCredentials = _options$withCredenti === undefined ? 'same-origin' : _options$withCredenti,
+                    rest = _objectWithoutProperties$1(options, ['method', 'url', 'data', 'responseType', 'withCredentials']);
 
                 var restOptions = fetchDriver.handleXhr(rest);
 
@@ -276,7 +285,7 @@
                 settings.headers = _extends$1({}, settings.headers || {}, fetchDriver.prepareDataType(dataType));
 
                 /** for sending cookies **/
-                settings.credentials = 'same-origin';
+                settings.credentials = withCredentials;
 
                 if (HttpUtil.isFormData(settings.body)) {
                     //https://stackoverflow.com/questions/39280438/fetch-missing-boundary-in-multipart-form-data-post
@@ -776,12 +785,15 @@
                     name = _options$name === undefined ? '' : _options$name,
                     _options$driver = options.driver,
                     driver = _options$driver === undefined ? 'jquery' : _options$driver,
-                    settings = _objectWithoutProperties$3(options, ['name', 'driver']);
+                    _options$baseUrl = options.baseUrl,
+                    baseUrl = _options$baseUrl === undefined ? '' : _options$baseUrl,
+                    url = options.url,
+                    settings = _objectWithoutProperties$3(options, ['name', 'driver', 'baseUrl', 'url']);
 
                 this.name = name;
                 this.driver = driver;
                 settings.method && (settings.method = settings.method.toUpperCase());
-                this.options = _extends$4({}, settings, { driver: driver });
+                this.options = _extends$4({}, settings, { driver: driver, url: HttpUtil.urlGenerator(baseUrl, url) });
 
                 return this;
             }
@@ -954,15 +966,10 @@
 
     var _extends$5 = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-    function _objectWithoutProperties$4(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
     function install(Vue) {
-        var globalOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
         var setup = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-        var _globalOptions$baseUr = globalOptions.baseUrl,
-            baseUrl = _globalOptions$baseUr === undefined ? '' : _globalOptions$baseUr,
-            options = _objectWithoutProperties$4(globalOptions, ['baseUrl']);
 
         Vue.prototype.$http = new Http(options);
 
@@ -977,7 +984,6 @@
                     var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
                     var settings = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
-                    url = this.jaxUrlGenerator(url);
                     return this.ajax(_extends$5({
                         url: url, method: method, data: data }, options, settings));
                 },
@@ -1007,11 +1013,6 @@
                     }
 
                     return false;
-                },
-                jaxUrlGenerator: function jaxUrlGenerator(url) {
-                    var base = baseUrl.replace(/\/$/, '');
-                    url = url.replace(/^\//, '');
-                    return base + '/' + url;
                 }
             }
         });
